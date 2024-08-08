@@ -1,11 +1,7 @@
 function complete_penter
-  for path in (find ~/devel -maxdepth 1 \( -type d -a ! -name '.*' \))
-    set BASENAME (basename $path)
-    if ! test -d $path/.git
-      continue
-    end
-
-    echo -e "$BASENAME\tProject"
+  for path in (conda env list --json | jq -r '.envs[]' | grep -v '/.tox/' | grep $CONDA_PREFIX/envs/)
+    set name (echo $path | sed -e "s,$CONDA_PREFIX/envs/,,")
+    echo -e "$name\tProject"
   end
 end
 
